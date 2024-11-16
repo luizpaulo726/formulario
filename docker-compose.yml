@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+    app:
+        build:
+            context: . # O Dockerfile está na raiz do projeto
+        container_name: formulario_app
+        volumes:
+            - .:/var/www/html
+        networks:
+            - app-network
+
+    web:
+        image: nginx:latest
+        container_name: formulario_web
+        volumes:
+            - .:/var/www/html
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+        ports:
+            - "8080:80"
+        depends_on:
+            - app
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
